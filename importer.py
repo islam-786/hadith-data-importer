@@ -1,6 +1,7 @@
 import json
 
-# import fireo
+from hadith_bukhari import HadithBukhari
+import fireo
 
 mypath = './bukhari'
 
@@ -9,34 +10,51 @@ onlyfiles = []
 for n in range(1, 98):
     onlyfiles.append(str(n) + ".json")
 
+overAllHadithCount = 1
+
 for single_file in onlyfiles:
 
-    file_location = mypath + "/" + single_file
-    f = open(file_location, "r", encoding="utf8")
+    file_location_en = "./bukhari/" + single_file
+    f_en = open(file_location_en, "r", encoding="utf8")
 
-    # trans_batch = fireo.batch()
+    file_location_ur = "./bukhari-urdu/" + single_file
+    f_ur = open(file_location_ur, "r", encoding="utf8")
+
+    hadith_batch = fireo.batch()
     count = 0
 
-    data = json.load(f)
+    data_en = json.load(f_en)
+    data_ur = json.load(f_ur)
 
-    for i in data: 
-        print(i)
-        break
+    for en, ur in zip(data_en, data_ur):
+        hadith = HadithBukhari()
+        hadith.id = str(overAllHadithCount)
+        hadith.bookName = en['book']
+        hadith.bookNameArabic = en['arabicBook']
+        hadith.bookNumber = en['number']
+        hadith.hadithNumber = en['hadithNumber']
+        hadith.numberInBook = en['NumberInBook']
+        hadith.chapterName = en['chapter']
+        hadith.chapterNameArabic = en['arabicChapter']
+        hadith.narratedBy = en['narratedBy']
+        hadith.narratedByArabic = en['narratedByArabic']
+        hadith.narratedByArabicDetail = en['narratedByDetail']
+        hadith.narratedByUrdu = ur['narratedBy']
+        hadith.text = en['text']
+        hadith.textArabic = en['arabicText']
+        hadith.textUrdu = ur['text']
 
-    f.close()
+        #hadith.save(batch=hadith_batch)
 
-    break
+        
+        overAllHadithCount += 1
+        count += 1
+        if(count >= 400):
+            #hadith_batch.commit()
+            count = 0
 
-    # for line in f:
-    
-    #     if not line.strip():
-    #         print('file end')
-    #         break
+    f_en.close()
+    f_ur.close()
 
-    #     count += 1
-    #     if(count >= 400):
-    #         trans_batch.commit()
-    #         count = 0
-
-    # print('============Complete=============================')
-    # trans_batch.commit()
+    print('============Complete '+single_file+'===================')
+    #hadith_batch.commit()
