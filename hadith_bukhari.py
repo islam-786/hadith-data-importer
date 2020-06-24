@@ -6,7 +6,7 @@ class HadithBukhari(Model):
     bookName = TextField()
     bookNameArabic = TextField()
     bookNumber = NumberField()
-    hadithNumber = NumberField()
+    hadithNumber = TextField()
     numberInBook = NumberField()
     chapterName = TextField()
     chapterNameArabic = TextField()

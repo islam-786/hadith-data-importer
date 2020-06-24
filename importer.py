@@ -8,6 +8,9 @@ mypath = './bukhari'
 onlyfiles = []
 
 for n in range(1, 98):
+    if n == 8 or n == 9:
+        continue
+
     onlyfiles.append(str(n) + ".json")
 
 overAllHadithCount = 1
@@ -44,17 +47,17 @@ for single_file in onlyfiles:
         hadith.textArabic = en['arabicText']
         hadith.textUrdu = ur['text']
 
-        #hadith.save(batch=hadith_batch)
+        hadith.save(batch=hadith_batch)
 
         
         overAllHadithCount += 1
         count += 1
         if(count >= 400):
-            #hadith_batch.commit()
+            hadith_batch.commit()
             count = 0
 
     f_en.close()
     f_ur.close()
 
     print('============Complete '+single_file+'===================')
-    #hadith_batch.commit()
+    hadith_batch.commit()
